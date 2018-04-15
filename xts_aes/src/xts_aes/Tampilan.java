@@ -254,6 +254,16 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
+        // inisialisasi JFileChooser
+        JFileChooser pilih = new JFileChooser();
+        // membuka direktori
+        pilih.showOpenDialog(null);
+        // memilih file
+        File cipher = pilih.getSelectedFile();
+        // nama file yang dipilih beserta direktori nya
+        String namaFileCipher = cipher.getAbsolutePath();
+        // menampilkan direktori dan file yang di pilih dalam berbentuk tulisan di textfile
+        textField4.setText(namaFileCipher);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
