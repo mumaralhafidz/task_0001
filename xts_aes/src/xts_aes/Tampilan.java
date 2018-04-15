@@ -4,6 +4,9 @@
  */
 package xts_aes;
 
+import java.io.File;
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author Anggi
@@ -211,6 +214,16 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        // inisialisasi JFileChooser
+        JFileChooser pilih = new JFileChooser();
+        // membuka direktori
+        pilih.showOpenDialog(null);
+        // memilih file
+        File plain = pilih.getSelectedFile();
+        // nama file yang dipilih beserta direktori nya
+        String namaFilePlain = plain.getAbsolutePath();
+        // menampilkan direktori dan file yang di pilih dalam berbentuk tulisan di textfile
+        textField2.setText(namaFilePlain);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
