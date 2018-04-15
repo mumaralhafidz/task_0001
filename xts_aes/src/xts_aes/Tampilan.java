@@ -82,6 +82,8 @@ public class Tampilan extends javax.swing.JFrame {
         jButton2.setBounds(740, 130, 140, 40);
         jLayeredPane1.add(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        textField1.setEditable(false);
+        textField1.setEnabled(false);
         textField1.setFont(new java.awt.Font("Bell MT", 0, 16)); // NOI18N
         textField1.setForeground(new java.awt.Color(130, 130, 130));
         textField1.setText("Input the Key");
@@ -95,6 +97,7 @@ public class Tampilan extends javax.swing.JFrame {
 
         textField2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         textField2.setEditable(false);
+        textField2.setEnabled(false);
         textField2.setFont(new java.awt.Font("Bell MT", 0, 16)); // NOI18N
         textField2.setForeground(new java.awt.Color(130, 130, 130));
         textField2.setText("Input the Plaintext");
@@ -123,23 +126,29 @@ public class Tampilan extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("Encrypt", jLayeredPane1);
 
-        jLabel2.setText("Encrypted File");
-        jLabel2.setBounds(10, 40, 80, 16);
+        jLabel2.setFont(new java.awt.Font("Perpetua Titling MT", 1, 18)); // NOI18N
+        jLabel2.setText("Cipher text");
+        jLabel2.setBounds(20, 70, 140, 16);
         jLayeredPane2.add(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        jLabel4.setFont(new java.awt.Font("Perpetua Titling MT", 1, 18)); // NOI18N
         jLabel4.setText("Key");
-        jLabel4.setBounds(10, 110, 60, 16);
+        jLabel4.setBounds(60, 150, 50, 16);
         jLayeredPane2.add(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        jButton5.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
         jButton5.setText("Browse File");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
-        jButton5.setBounds(740, 110, 140, 40);
+        jButton5.setBounds(740, 140, 140, 40);
         jLayeredPane2.add(jButton5, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        textField3.setEditable(false);
+        textField3.setEnabled(false);
+        textField3.setFont(new java.awt.Font("Bell MT", 0, 16)); // NOI18N
         textField3.setForeground(new java.awt.Color(130, 130, 130));
         textField3.setText("Input the Key");
         textField3.addActionListener(new java.awt.event.ActionListener() {
@@ -147,36 +156,41 @@ public class Tampilan extends javax.swing.JFrame {
                 textField3ActionPerformed(evt);
             }
         });
-        textField3.setBounds(110, 110, 590, 40);
+        textField3.setBounds(170, 140, 530, 40);
         jLayeredPane2.add(textField3, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        textField4.setEditable(false);
+        textField4.setEnabled(false);
+        textField4.setFont(new java.awt.Font("Bell MT", 0, 16)); // NOI18N
         textField4.setForeground(new java.awt.Color(130, 130, 130));
-        textField4.setText("Input the Plaintext");
+        textField4.setText("Input the Ciphertext");
         textField4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textField4ActionPerformed(evt);
             }
         });
-        textField4.setBounds(110, 40, 590, 40);
+        textField4.setBounds(170, 60, 530, 40);
         jLayeredPane2.add(textField4, javax.swing.JLayeredPane.DEFAULT_LAYER);
         textField4.getAccessibleContext().setAccessibleDescription("");
 
+        jButton6.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
         jButton6.setText("Decrypt File");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
             }
         });
-        jButton6.setBounds(340, 210, 170, 40);
+        jButton6.setBounds(340, 240, 170, 40);
         jLayeredPane2.add(jButton6, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        jButton7.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
         jButton7.setText("Browse File");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
             }
         });
-        jButton7.setBounds(740, 40, 140, 40);
+        jButton7.setBounds(740, 60, 140, 40);
         jLayeredPane2.add(jButton7, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jTabbedPane2.addTab("Decrypt", jLayeredPane2);
