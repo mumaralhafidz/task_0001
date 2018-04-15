@@ -12,7 +12,7 @@ import javax.swing.JFileChooser;
  * @author Anggi
  */
 public class Tampilan extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form Tampilan
      */
@@ -50,6 +50,11 @@ public class Tampilan extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         jTextField1.setText("aaaaaa");
 
@@ -57,23 +62,27 @@ public class Tampilan extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 18)); // NOI18N
         jLabel1.setText("Key");
-        jLabel1.setBounds(10, 110, 60, 16);
+        jLabel1.setBounds(60, 140, 50, 23);
         jLayeredPane1.add(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        jLabel3.setFont(new java.awt.Font("Perpetua Titling MT", 1, 18)); // NOI18N
         jLabel3.setText("Plain Text");
-        jLabel3.setBounds(10, 40, 60, 16);
+        jLabel3.setBounds(20, 60, 120, 16);
         jLayeredPane1.add(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        jButton2.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
         jButton2.setText("Browse File");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        jButton2.setBounds(740, 110, 140, 40);
+        jButton2.setBounds(740, 130, 140, 40);
         jLayeredPane1.add(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        textField1.setFont(new java.awt.Font("Bell MT", 0, 16)); // NOI18N
         textField1.setForeground(new java.awt.Color(130, 130, 130));
         textField1.setText("Input the Key");
         textField1.addActionListener(new java.awt.event.ActionListener() {
@@ -81,9 +90,12 @@ public class Tampilan extends javax.swing.JFrame {
                 textField1ActionPerformed(evt);
             }
         });
-        textField1.setBounds(110, 110, 590, 40);
+        textField1.setBounds(150, 130, 550, 40);
         jLayeredPane1.add(textField1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        textField2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        textField2.setEditable(false);
+        textField2.setFont(new java.awt.Font("Bell MT", 0, 16)); // NOI18N
         textField2.setForeground(new java.awt.Color(130, 130, 130));
         textField2.setText("Input the Plaintext");
         textField2.addActionListener(new java.awt.event.ActionListener() {
@@ -91,20 +103,22 @@ public class Tampilan extends javax.swing.JFrame {
                 textField2ActionPerformed(evt);
             }
         });
-        textField2.setBounds(110, 40, 590, 40);
+        textField2.setBounds(150, 50, 550, 40);
         jLayeredPane1.add(textField2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        jButton3.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
         jButton3.setText("Encrypt File");
-        jButton3.setBounds(340, 210, 170, 40);
+        jButton3.setBounds(340, 240, 170, 40);
         jLayeredPane1.add(jButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        jButton4.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
         jButton4.setText("Browse File");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
-        jButton4.setBounds(740, 40, 140, 40);
+        jButton4.setBounds(740, 50, 140, 40);
         jLayeredPane1.add(jButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jTabbedPane2.addTab("Encrypt", jLayeredPane1);
@@ -145,6 +159,7 @@ public class Tampilan extends javax.swing.JFrame {
         });
         textField4.setBounds(110, 40, 590, 40);
         jLayeredPane2.add(textField4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        textField4.getAccessibleContext().setAccessibleDescription("");
 
         jButton6.setText("Decrypt File");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -166,28 +181,55 @@ public class Tampilan extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("Decrypt", jLayeredPane2);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 36)); // NOI18N
         jLabel5.setText("XTS-AES ");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel6.setText("Kelompok 29");
+        jLabel6.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel6.setText("XEX (XOR-Encrypt-XOR) Tweakable Block Cipher with Ciphertext Stealing");
+
+        jLabel7.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel7.setText("Mochammad Umar Al Hafidz");
+
+        jLabel8.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel8.setText("Tugas Proyek Pemograman 1 CIS Kelompok 29 :");
+
+        jLabel9.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel9.setText("Keumala Anggraini");
+
+        jLabel10.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel10.setText("- (1606964710)");
+
+        jLabel11.setFont(new java.awt.Font("Swis721 WGL4 BT", 0, 18)); // NOI18N
+        jLabel11.setText("- (1606964673)");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 913, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 913, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(400, 400, 400)
+                        .addComponent(jLabel5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(167, 167, 167)
+                        .addComponent(jLabel6)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel8)
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel6)))
-                .addGap(353, 353, 353))
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel9))
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel10))
+                .addGap(59, 59, 59))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +238,19 @@ public class Tampilan extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
-                .addGap(91, 91, 91)
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel10))
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel11))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel9)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -242,6 +296,7 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
+        
         // inisialisasi JFileChooser
         JFileChooser pilih = new JFileChooser();
         // membuka direktori
@@ -322,11 +377,16 @@ public class Tampilan extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLayeredPane jLayeredPane2;
     private javax.swing.JTabbedPane jTabbedPane2;
