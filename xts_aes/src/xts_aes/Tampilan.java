@@ -40,6 +40,10 @@ public class Tampilan extends javax.swing.JFrame {
         textField2 = new java.awt.TextField();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        textField5 = new java.awt.TextField();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox();
         jLayeredPane2 = new javax.swing.JLayeredPane();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -48,6 +52,10 @@ public class Tampilan extends javax.swing.JFrame {
         textField4 = new java.awt.TextField();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        textField6 = new java.awt.TextField();
+        jComboBox2 = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -64,7 +72,7 @@ public class Tampilan extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Perpetua Titling MT", 1, 18)); // NOI18N
         jLabel1.setText("Key");
-        jLabel1.setBounds(60, 140, 50, 23);
+        jLabel1.setBounds(60, 130, 50, 23);
         jLayeredPane1.add(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jLabel3.setFont(new java.awt.Font("Perpetua Titling MT", 1, 18)); // NOI18N
@@ -79,7 +87,7 @@ public class Tampilan extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        jButton2.setBounds(740, 130, 140, 40);
+        jButton2.setBounds(810, 120, 140, 40);
         jLayeredPane1.add(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textField1.setEditable(false);
@@ -92,7 +100,7 @@ public class Tampilan extends javax.swing.JFrame {
                 textField1ActionPerformed(evt);
             }
         });
-        textField1.setBounds(150, 130, 550, 40);
+        textField1.setBounds(200, 120, 500, 40);
         jLayeredPane1.add(textField1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textField2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -106,12 +114,17 @@ public class Tampilan extends javax.swing.JFrame {
                 textField2ActionPerformed(evt);
             }
         });
-        textField2.setBounds(150, 50, 550, 40);
+        textField2.setBounds(200, 50, 500, 40);
         jLayeredPane1.add(textField2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jButton3.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
         jButton3.setText("Encrypt File");
-        jButton3.setBounds(340, 240, 170, 40);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jButton3.setBounds(340, 280, 170, 40);
         jLayeredPane1.add(jButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jButton4.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
@@ -121,19 +134,47 @@ public class Tampilan extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        jButton4.setBounds(740, 50, 140, 40);
+        jButton4.setBounds(810, 50, 140, 40);
         jLayeredPane1.add(jButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textField5.setEditable(false);
+        textField5.setEnabled(false);
+        textField5.setFont(new java.awt.Font("Bell MT", 0, 16)); // NOI18N
+        textField5.setForeground(new java.awt.Color(130, 130, 130));
+        textField5.setText("Input the Initialization Vector");
+        textField5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textField5ActionPerformed(evt);
+            }
+        });
+        textField5.setBounds(200, 190, 500, 40);
+        jLayeredPane1.add(textField5, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jLabel12.setFont(new java.awt.Font("Perpetua Titling MT", 1, 18)); // NOI18N
+        jLabel12.setText("vector");
+        jLabel12.setBounds(50, 210, 80, 20);
+        jLayeredPane1.add(jLabel12, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jLabel13.setFont(new java.awt.Font("Perpetua Titling MT", 1, 18)); // NOI18N
+        jLabel13.setText("Initialization");
+        jLabel13.setBounds(10, 190, 170, 20);
+        jLayeredPane1.add(jLabel13, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jComboBox1.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Browse File", "Item 3", "Item 4" }));
+        jComboBox1.setBounds(740, 190, 270, 40);
+        jLayeredPane1.add(jComboBox1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jTabbedPane2.addTab("Encrypt", jLayeredPane1);
 
         jLabel2.setFont(new java.awt.Font("Perpetua Titling MT", 1, 18)); // NOI18N
         jLabel2.setText("Cipher text");
-        jLabel2.setBounds(20, 70, 140, 16);
+        jLabel2.setBounds(20, 60, 140, 16);
         jLayeredPane2.add(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jLabel4.setFont(new java.awt.Font("Perpetua Titling MT", 1, 18)); // NOI18N
         jLabel4.setText("Key");
-        jLabel4.setBounds(60, 150, 50, 16);
+        jLabel4.setBounds(60, 130, 50, 16);
         jLayeredPane2.add(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jButton5.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
@@ -143,7 +184,7 @@ public class Tampilan extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
-        jButton5.setBounds(740, 140, 140, 40);
+        jButton5.setBounds(810, 120, 140, 40);
         jLayeredPane2.add(jButton5, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textField3.setEditable(false);
@@ -156,7 +197,7 @@ public class Tampilan extends javax.swing.JFrame {
                 textField3ActionPerformed(evt);
             }
         });
-        textField3.setBounds(170, 140, 530, 40);
+        textField3.setBounds(200, 120, 500, 40);
         jLayeredPane2.add(textField3, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         textField4.setEditable(false);
@@ -169,7 +210,7 @@ public class Tampilan extends javax.swing.JFrame {
                 textField4ActionPerformed(evt);
             }
         });
-        textField4.setBounds(170, 60, 530, 40);
+        textField4.setBounds(200, 50, 500, 40);
         jLayeredPane2.add(textField4, javax.swing.JLayeredPane.DEFAULT_LAYER);
         textField4.getAccessibleContext().setAccessibleDescription("");
 
@@ -180,7 +221,7 @@ public class Tampilan extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
-        jButton6.setBounds(340, 240, 170, 40);
+        jButton6.setBounds(340, 280, 170, 40);
         jLayeredPane2.add(jButton6, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jButton7.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
@@ -190,8 +231,36 @@ public class Tampilan extends javax.swing.JFrame {
                 jButton7ActionPerformed(evt);
             }
         });
-        jButton7.setBounds(740, 60, 140, 40);
+        jButton7.setBounds(810, 50, 140, 40);
         jLayeredPane2.add(jButton7, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jLabel14.setFont(new java.awt.Font("Perpetua Titling MT", 1, 18)); // NOI18N
+        jLabel14.setText("Initialization");
+        jLabel14.setBounds(10, 190, 170, 20);
+        jLayeredPane2.add(jLabel14, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jLabel15.setFont(new java.awt.Font("Perpetua Titling MT", 1, 18)); // NOI18N
+        jLabel15.setText("vector");
+        jLabel15.setBounds(50, 210, 80, 20);
+        jLayeredPane2.add(jLabel15, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        textField6.setEditable(false);
+        textField6.setEnabled(false);
+        textField6.setFont(new java.awt.Font("Bell MT", 0, 16)); // NOI18N
+        textField6.setForeground(new java.awt.Color(130, 130, 130));
+        textField6.setText("Input the Initialization Vector");
+        textField6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textField6ActionPerformed(evt);
+            }
+        });
+        textField6.setBounds(200, 190, 500, 40);
+        jLayeredPane2.add(textField6, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jComboBox2.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Browse File", "Item 3", "Item 4" }));
+        jComboBox2.setBounds(740, 190, 270, 40);
+        jLayeredPane2.add(jComboBox2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jTabbedPane2.addTab("Decrypt", jLayeredPane2);
 
@@ -223,27 +292,29 @@ public class Tampilan extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 913, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(400, 400, 400)
-                        .addComponent(jLabel5))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(167, 167, 167)
-                        .addComponent(jLabel6)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(130, 130, 130)
+                        .addComponent(jLabel8)
+                        .addGap(32, 32, 32)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel9))
+                        .addGap(37, 37, 37)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel10))
+                        .addGap(0, 98, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1032, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel9))
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel10))
-                .addGap(59, 59, 59))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(233, 233, 233)
+                        .addComponent(jLabel5))
+                    .addComponent(jLabel6))
+                .addGap(224, 224, 224))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -349,6 +420,18 @@ public class Tampilan extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void textField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textField5ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void textField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textField6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -390,9 +473,15 @@ public class Tampilan extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -410,5 +499,7 @@ public class Tampilan extends javax.swing.JFrame {
     private java.awt.TextField textField2;
     private java.awt.TextField textField3;
     private java.awt.TextField textField4;
+    private java.awt.TextField textField5;
+    private java.awt.TextField textField6;
     // End of variables declaration//GEN-END:variables
 }
