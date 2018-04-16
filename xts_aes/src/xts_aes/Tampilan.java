@@ -17,7 +17,7 @@ public class Tampilan extends javax.swing.JFrame {
      * Creates new form Tampilan
      */
     public Tampilan() {
-        initComponents();
+        initComponents();     
     }
 
     /**
@@ -162,6 +162,16 @@ public class Tampilan extends javax.swing.JFrame {
 
         jComboBox1.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Browse File", "Item 3", "Item 4" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
         jComboBox1.setBounds(740, 190, 270, 40);
         jLayeredPane1.add(jComboBox1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -259,6 +269,11 @@ public class Tampilan extends javax.swing.JFrame {
 
         jComboBox2.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Browse File", "Item 3", "Item 4" }));
+        jComboBox2.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox2ItemStateChanged(evt);
+            }
+        });
         jComboBox2.setBounds(740, 190, 270, 40);
         jLayeredPane2.add(jComboBox2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -343,6 +358,9 @@ public class Tampilan extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // inisialisasi JFileChooser
+    JFileChooser pilih = new JFileChooser();
+            
     private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textField1ActionPerformed
@@ -353,8 +371,6 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        // inisialisasi JFileChooser
-        JFileChooser pilih = new JFileChooser();
         // membuka direktori
         pilih.showOpenDialog(null);
         // memilih file
@@ -381,9 +397,6 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        
-        // inisialisasi JFileChooser
-        JFileChooser pilih = new JFileChooser();
         // membuka direktori
         pilih.showOpenDialog(null);
         // memilih file
@@ -404,8 +417,6 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        // inisialisasi JFileChooser
-        JFileChooser pilih = new JFileChooser();
         // membuka direktori
         pilih.showOpenDialog(null);
         // memilih file
@@ -431,6 +442,38 @@ public class Tampilan extends javax.swing.JFrame {
     private void textField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textField6ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        // TODO add your handling code here:
+        if(jComboBox1.getSelectedItem()=="Browse File"){
+            // membuka direktori
+            pilih.showOpenDialog(null);
+            // memilih file
+            File ivPlain = pilih.getSelectedFile();
+            // nama file yang dipilih beserta direktori nya
+            String namaIVPlain = ivPlain.getAbsolutePath();
+            // menampilkan direktori dan file yang di pilih dalam berbentuk tulisan di textfile
+            textField5.setText(namaIVPlain);
+        }
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
+
+    private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
+        // TODO add your handling code here:
+        if(jComboBox2.getSelectedItem()=="Browse File"){
+            //membuka direktori
+            pilih.showOpenDialog(null);
+            // memilih file
+            File ivCipher = pilih.getSelectedFile();
+            // nama file yang dipilih beserta direktorinya
+            String namaIVCipher = ivCipher.getAbsolutePath();
+            // menampilkan direktori dan file yang dipilih dalam bentuk tulisan di textfield
+            textField6.setText(namaIVCipher);
+        }
+    }//GEN-LAST:event_jComboBox2ItemStateChanged
 
     /**
      * @param args the command line arguments
