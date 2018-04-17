@@ -4,8 +4,21 @@
  */
 package xts_aes;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+
+import java.io.RandomAccessFile;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 /**
  *
@@ -161,7 +174,7 @@ public class Tampilan extends javax.swing.JFrame {
         jLayeredPane1.add(jLabel13, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jComboBox1.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Browse File", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Browse File", "12345678901234567890123456789012", "Item 4" }));
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox1ItemStateChanged(evt);
@@ -268,7 +281,7 @@ public class Tampilan extends javax.swing.JFrame {
         jLayeredPane2.add(textField6, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jComboBox2.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Browse File", "Item 3", "Item 4" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Browse File", "12345678901234567890123456789012", "Item 4" }));
         jComboBox2.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox2ItemStateChanged(evt);
@@ -357,10 +370,8 @@ public class Tampilan extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    // inisialisasi JFileChooser
+    // inisilisasi File Chooser        
     JFileChooser pilih = new JFileChooser();
-            
     private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textField1ActionPerformed
@@ -383,16 +394,41 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        // inisialisasi JFileChooser
-        JFileChooser pilih = new JFileChooser();
         // membuka direktori
         pilih.showOpenDialog(null);
         // memilih file
-        File keyplain = pilih.getSelectedFile();
+        File keyPlain = pilih.getSelectedFile();
         // nama file yang dipilih beserta direktori nya
-        String namaFileKeyPlain = keyplain.getAbsolutePath();
+        String namaKeyPlain = keyPlain.getAbsolutePath();
         // menampilkan direktori dan file yang di pilih dalam berbentuk tulisan di textfile
-        textField1.setText(namaFileKeyPlain);
+        textField1.setText(namaKeyPlain);
+       
+        // inisialisasi file
+        File file = new File(namaKeyPlain);
+        try {
+            // inisialisasi panjang key
+            int key_length = 64;
+            // using bufferedreader file
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            // baca isi file
+            String baca = br.readLine();
+            // baca isi file telah selesai
+            br.close();  
+            
+            // mengubah menjadi dua bagian key, yaitu key 1 dan key 2
+            String keyPlain1 = baca.substring(0, key_length / 2);
+            String keyPlain2 = baca.substring(key_length / 2);
+            
+            // mengubah hexa (string) menjadi byte (array)
+            byte[] bytekeyPlain1 = Konversi.hexStringToByteArray(keyPlain1);
+            byte[] bytekeyPlain2 = Konversi.hexStringToByteArray(keyPlain2);
+                                    
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -459,6 +495,10 @@ public class Tampilan extends javax.swing.JFrame {
             // menampilkan direktori dan file yang di pilih dalam berbentuk tulisan di textfile
             textField5.setText(namaIVPlain);
         }
+        else if(jComboBox1.getSelectedItem()=="12345678901234567890123456789012"){
+            String iv1 = "12345678901234567890123456789012";
+            textField5.setText(iv1);
+        } 
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
@@ -473,8 +513,12 @@ public class Tampilan extends javax.swing.JFrame {
             // menampilkan direktori dan file yang dipilih dalam bentuk tulisan di textfield
             textField6.setText(namaIVCipher);
         }
+        else if(jComboBox2.getSelectedItem()=="12345678901234567890123456789012"){
+            String iv1 = "12345678901234567890123456789012";
+            textField6.setText(iv1);
+        }
     }//GEN-LAST:event_jComboBox2ItemStateChanged
-
+     
     /**
      * @param args the command line arguments
      */

@@ -293,7 +293,7 @@
                   <StringArray count="4">
                     <StringItem index="0" value=""/>
                     <StringItem index="1" value="Browse File"/>
-                    <StringItem index="2" value="Item 3"/>
+                    <StringItem index="2" value="12345678901234567890123456789012"/>
                     <StringItem index="3" value="Item 4"/>
                   </StringArray>
                 </Property>
@@ -496,7 +496,7 @@
                   <StringArray count="4">
                     <StringItem index="0" value=""/>
                     <StringItem index="1" value="Browse File"/>
-                    <StringItem index="2" value="Item 3"/>
+                    <StringItem index="2" value="12345678901234567890123456789012"/>
                     <StringItem index="3" value="Item 4"/>
                   </StringArray>
                 </Property>
