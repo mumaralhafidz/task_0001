@@ -494,9 +494,26 @@ public class Tampilan extends javax.swing.JFrame {
             String namaIVPlain = ivPlain.getAbsolutePath();
             // menampilkan direktori dan file yang di pilih dalam berbentuk tulisan di textfile
             textField5.setText(namaIVPlain);
+            
+            File file = new File(namaIVPlain);
+            try {
+                // using bufferedreader file
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                // baca isi file
+                String baca = br.readLine();
+                // baca isi file telah selesai
+                br.close();  
+                // mengubah hexa (string) menjadi byte (array)
+                byte[] byteIVPlain = Konversi.hexStringToByteArray(baca);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         else if(jComboBox1.getSelectedItem()=="12345678901234567890123456789012"){
             String iv1 = "12345678901234567890123456789012";
+            byte[] byteIVPlain = Konversi.hexStringToByteArray(iv1);
             textField5.setText(iv1);
         } 
     }//GEN-LAST:event_jComboBox1ItemStateChanged
