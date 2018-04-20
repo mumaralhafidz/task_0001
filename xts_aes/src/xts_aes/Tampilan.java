@@ -17,10 +17,13 @@ import java.io.RandomAccessFile;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
-import sun.net.www.content.text.plain;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -374,6 +377,13 @@ public class Tampilan extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     // inisilisasi File Chooser        
     JFileChooser pilih = new JFileChooser();
+    // inisialisasi size block
+    int block_size = 16;
+    
+    int byte_size;
+    
+    byte[][] multiplyAlpha;
+    
     private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textField1ActionPerformed
@@ -464,10 +474,25 @@ public class Tampilan extends javax.swing.JFrame {
             // convert string to bytes
             byte[] keyPlain1 = Konversi.hexStringToByteArray(namakeyPlain1);
             byte[] keyPlain2 = Konversi.hexStringToByteArray(namakeyPlain2);
-        
+            
+            AES aes = new AES(keyPlain2);
+            String z = textField5.getText();
+            byte[] iv = Konversi.hexStringToByteArray(z);
             try {
-                // inisialisasi size block
-                int block_size = 16;
+                multiplyAlpha(aes.encrypt(iv));
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchPaddingException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidKeyException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalBlockSizeException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (BadPaddingException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
+            try {
                 // mengambil input
                 String plain = textField2.getText();
                 RandomAccessFile randAccIn = new RandomAccessFile(plain, "r");
@@ -479,17 +504,74 @@ public class Tampilan extends javax.swing.JFrame {
                 int byte_size = (int) (input_length / block_size);
                 int end_block = (int) (input_length % block_size);
                 
+                //
+                byte[][] in = new byte[byte_size + 1][block_size];
+                in[byte_size] = new byte[end_block];
+                
+                //
+                byte[][] out = new byte[byte_size + 1][block_size];
+                out[byte_size] = new byte[end_block];
+                
+                //
+                for(int a = 0; a < in.length; a++){
+                    randAccIn.read(in[a]);
+                }
+                
+                //
+                for(int x = 0; x <= byte_size - 2; x++){
+                    out[x] = enkripBlok(keyPlain1, keyPlain2, in[x], x);
+                }
+                
+                // Jika tidak ada proses stealing
+                if(end_block == 0){
+                    out[byte_size - 1] = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
+                    out[byte_size] = new byte[0];
+                }
+                
+                // Jika terjadi stealing
+                else{
+                    byte[] cc = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
+                    System.arraycopy(cc, 0, out[byte_size], 0, end_block);
+                    byte[] cp = new byte[block_size - end_block];
+                    for(int y = end_block; y < block_size; y++){
+                        cp[y - end_block] = cc[y];
+                    }
+                    byte[] pp = new byte[in[byte_size].length + cp.length];
+                    System.arraycopy(in[byte_size], 0, pp, 0, in[byte_size].length);
+                    System.arraycopy(cp, 0, pp, 0, in[byte_size].length);
+                }
+                randAccIn.close();
+                
+                // informasi tentang telah selesai melakukan enkripsi
+                int response = JOptionPane.showConfirmDialog(null, "Encrypt Done !!", "", JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
+                
+                // menyimpan file output
+                if(response == JOptionPane.OK_OPTION){
+                    String cipher = textField2.getText();
+                    RandomAccessFile randAccOut = new RandomAccessFile(cipher, "rw");
+                    for(int p = 0; p < out.length; p++){
+                        for(int q = 0; q < out[p].length; q++){
+                            randAccOut.write(out[p][q]);
+                        }
+                        randAccOut.close();
+                    }
+                }
                 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchPaddingException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidKeyException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalBlockSizeException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (BadPaddingException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
             }
-            // mendapatkan nilai pada iv
-            String a = textField5.getText();
-            // convert iv to bytes
-        
-            System.out.println(keyPlain);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -510,9 +592,8 @@ public class Tampilan extends javax.swing.JFrame {
             File ivPlain = pilih.getSelectedFile();
             // nama file yang dipilih beserta direktori nya
             String namaIVPlain = ivPlain.getAbsolutePath();
-            // menampilkan direktori dan file yang di pilih dalam berbentuk tulisan di textfile
-            textField5.setText(namaIVPlain);
-            
+            System.out.println(namaIVPlain);
+                        
             File file = new File(namaIVPlain);
             try {
                 // using bufferedreader file
@@ -622,4 +703,80 @@ public class Tampilan extends javax.swing.JFrame {
     private java.awt.TextField textField5;
     private java.awt.TextField textField6;
     // End of variables declaration//GEN-END:variables
+
+    private byte[] enkripBlok(byte[] key1, byte[] key2, byte[] b, int x) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        AES aes= new AES(key2);
+        byte[] t = multiplyAlpha[x];
+	byte[] pp = xortweaktext(t, b); 
+	aes= new AES(key1);
+	byte[] cc = aes.encrypt(pp);
+	byte[] c = xortweaktext(t, cc);  
+		
+	return c;
+    }
+    
+    public void multiplyAlpha(byte[] tweakEncrypt) {
+        byte[][] multiplyDP = new byte[byte_size + 1][block_size];
+        multiplyDP[0] = tweakEncrypt;
+        for (int i = 1; i < byte_size + 1; i++) {
+            multiplyDP[i][0] = (byte) ((2 * (multiplyDP[i-1][0] % 128)) ^ (135 * (multiplyDP[i-1][15] / 128)));
+            for (int k = 1; k < 16; k++) {
+                multiplyDP[i][k] = (byte) ((2 * (multiplyDP[i-1][k] % 128)) ^ (multiplyDP[i-1][k - 1] / 128));
+            }
+        }
+        this.multiplyAlpha =  multiplyDP;
+    }
+    
+    public byte[] xortweaktext (byte[] tweakEncrypt, byte[] textBlock){
+    	byte[] result = new byte[16];
+    	for(int i=0; i<tweakEncrypt.length; i++){
+    		result[i] = (byte)(tweakEncrypt[i]^textBlock[i]);
+    	}
+    	return result;
+    }
+}
+
+
+
+
+class AES {
+	
+	private String Key;
+
+	//Constructor, masukan key untuk AES
+	public AES(byte[] key) {
+		this.Key = Konversi.hexStringToByteArray(key);
+	}
+	
+	/*
+	 * method enkripsi dengan AES java library
+	 * @return byte[] hasil enkripsi
+	 */
+	public byte[] encrypt(byte[] textHex)throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+		SecretKey key = new SecretKeySpec(DatatypeConverter.parseHexBinary(Key), "AES");
+			
+		Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
+		cipher.init(Cipher.ENCRYPT_MODE, key);
+			
+		byte[] result = cipher.doFinal(DatatypeConverter.parseHexBinary(Konversi.byteArrayTohexString(textHex)));
+			
+		return result;
+	}
+	
+	/*
+	 * method dekripsi dengan AES java library
+	 * @return byte[] hasil dekripsi
+	 */
+	public byte[] decrypt(byte[] textHex)throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+		
+		SecretKey key = new SecretKeySpec(DatatypeConverter.parseHexBinary(Key), "AES");
+			
+		Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
+		cipher.init(Cipher.DECRYPT_MODE, key);
+			
+		byte[] result = cipher.doFinal(DatatypeConverter.parseHexBinary(Konversi.byteArrayTohexString(textHex)));
+			
+		return result;
+	}
+
 }

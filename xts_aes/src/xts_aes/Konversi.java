@@ -21,7 +21,7 @@ public class Konversi {
     }
 
 // Convert Byte Arrary to Hex String
-    public static String byteArray2hexString(byte[] b)
+    public static String byteArrayTohexString(byte[] b)
     {
 
      // String Buffer can be used instead
@@ -49,6 +49,10 @@ public class Konversi {
        }
 
        return hs;
+    }
+
+    static String hexStringToByteArray(byte[] key) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
