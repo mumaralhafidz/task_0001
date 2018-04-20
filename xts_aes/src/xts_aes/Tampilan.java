@@ -19,6 +19,8 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.swing.JOptionPane;
+import sun.net.www.content.text.plain;
 
 /**
  *
@@ -401,34 +403,7 @@ public class Tampilan extends javax.swing.JFrame {
         // nama file yang dipilih beserta direktori nya
         String namaKeyPlain = keyPlain.getAbsolutePath();
         // menampilkan direktori dan file yang di pilih dalam berbentuk tulisan di textfile
-        textField1.setText(namaKeyPlain);
-       
-        // inisialisasi file
-        File file = new File(namaKeyPlain);
-        try {
-            // inisialisasi panjang key
-            int key_length = 64;
-            // using bufferedreader file
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            // baca isi file
-            String baca = br.readLine();
-            // baca isi file telah selesai
-            br.close();  
-            
-            // mengubah menjadi dua bagian key, yaitu key 1 dan key 2
-            String keyPlain1 = baca.substring(0, key_length / 2);
-            String keyPlain2 = baca.substring(key_length / 2);
-            
-            // mengubah hexa (string) menjadi byte (array)
-            byte[] bytekeyPlain1 = Konversi.hexStringToByteArray(keyPlain1);
-            byte[] bytekeyPlain2 = Konversi.hexStringToByteArray(keyPlain2);
-                                    
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-        }
-                
+        textField1.setText(namaKeyPlain);             
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -473,6 +448,49 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        // inisialisasi panjang key
+        int key_length = 32;
+        // mengambil nilai key untuk plaintext
+        String keyPlain = textField1.getText();
+                
+        if(keyPlain.length() != 32){
+            JOptionPane.showMessageDialog(null, "Key must be 256 bits");
+        }
+        else {
+            // membagi dua key menjadi key1 dan key2
+            String namakeyPlain1 = keyPlain.substring(0, key_length / 2);
+            String namakeyPlain2 = keyPlain.substring(key_length / 2);
+        
+            // convert string to bytes
+            byte[] keyPlain1 = Konversi.hexStringToByteArray(namakeyPlain1);
+            byte[] keyPlain2 = Konversi.hexStringToByteArray(namakeyPlain2);
+        
+            try {
+                // inisialisasi size block
+                int block_size = 16;
+                // mengambil input
+                String plain = textField2.getText();
+                RandomAccessFile randAccIn = new RandomAccessFile(plain, "r");
+                
+                // menghitung panjang file input
+                long input_length = randAccIn.length();
+                
+                // menghitung byte size
+                int byte_size = (int) (input_length / block_size);
+                int end_block = (int) (input_length % block_size);
+                
+                
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            // mendapatkan nilai pada iv
+            String a = textField5.getText();
+            // convert iv to bytes
+        
+            System.out.println(keyPlain);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void textField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField6ActionPerformed
@@ -500,11 +518,9 @@ public class Tampilan extends javax.swing.JFrame {
                 // using bufferedreader file
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 // baca isi file
-                String baca = br.readLine();
-                // baca isi file telah selesai
-                br.close();  
-                // mengubah hexa (string) menjadi byte (array)
-                byte[] byteIVPlain = Konversi.hexStringToByteArray(baca);
+                String iv = br.readLine();
+                
+                textField5.setText(iv);
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -512,9 +528,9 @@ public class Tampilan extends javax.swing.JFrame {
             }
         }
         else if(jComboBox1.getSelectedItem()=="12345678901234567890123456789012"){
-            String iv1 = "12345678901234567890123456789012";
-            byte[] byteIVPlain = Konversi.hexStringToByteArray(iv1);
-            textField5.setText(iv1);
+            String iv = "12345678901234567890123456789012";
+            byte[] byteIVPlain = Konversi.hexStringToByteArray(iv);
+            textField5.setText(iv);
         } 
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
