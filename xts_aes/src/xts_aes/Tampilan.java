@@ -21,6 +21,10 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
 import javax.xml.bind.DatatypeConverter;
 
+
+
+
+
 /**
  *
  * @author Anggi
@@ -32,6 +36,7 @@ public class Tampilan extends javax.swing.JFrame {
      */
     
     private String cipher = "out.enc";
+    private String plainwrite = "plain.dec";
     public int block_size = 16;
     public int byte_size;
     public byte[][] multiplyAlpha;
@@ -447,7 +452,97 @@ public class Tampilan extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        try{
+            // TODO add your handling code here:
+        
+            // inisialisasi panjang key
+            int key_length = 64;
+            // mengambil direktori key
+            String keyCipher = textField3.getText();
+            // mengambil nilai menggunakan buffered reader
+            BufferedReader bf = new BufferedReader(new FileReader(keyCipher));
+            String bacakeyCipher = bf.readLine();
+            
+            // membagi dua key menjadi key1 dan key2
+            String namakeyCipher1 = bacakeyCipher.substring(0, key_length / 2);
+            String namakeyCipher2 = bacakeyCipher.substring(key_length / 2);
+            
+            // convert string to byte
+            byte[] keyCipher1 = Konversi.hexStringTobyteArray(namakeyCipher1);
+            byte[] keyCipher2 = Konversi.hexStringTobyteArray(namakeyCipher2);
+            bf.close();
+            
+            AES aes = new AES(keyCipher2);
+            String z = textField6.getText();
+            byte[] iv = Konversi.hexStringTobyteArray(z);
+            
+            // mengambil input
+            String cipher = textField4.getText();
+            RandomAccessFile randAccIn = new RandomAccessFile(cipher, "r");
+            
+            // menghitung panjang file cipher
+            long cipher_length = randAccIn.length();
+            
+            // menghitung byte size
+            this.byte_size = (int) (cipher_length / block_size);
+            int end_block = (int) (cipher_length % block_size);
+            multiplyAlpha(aes.encrypt(iv));
+            
+            // 
+            byte[][] ciph = new byte[byte_size + 1][block_size];
+            ciph[byte_size] = new byte[end_block];
+            
+            // 
+            byte[][] out = new byte[byte_size + 1][block_size];
+            out[byte_size] = new byte[end_block];
+            
+            // 
+            for(int a = 0; a < ciph.length; a++){
+                randAccIn.read(ciph[a]);
+            }
+            
+            //
+            for(int x = 0; x <= byte_size - 2; x++){
+                out[x] = dekripBlok(keyCipher1, keyCipher2, ciph[x], x);
+            }
+            
+            // Jika tidak ada proses stealing
+            if(end_block == 0){
+                out[byte_size - 1] = dekripBlok(keyCipher1, keyCipher2, out[byte_size - 1], byte_size - 1);
+                out[byte_size] = new byte[0];
+            }
+            
+            // Jika ada proses stealing
+            else{
+                byte[] pp = dekripBlok(keyCipher1, keyCipher2, ciph[byte_size - 1], byte_size - 1);
+                System.arraycopy(pp, 0, out[byte_size], 0, end_block);
+                byte[] cp = new byte[block_size - end_block];
+                for(int y = end_block; y < block_size; y++){
+                    cp[y - end_block] = pp[y];
+                }
+                byte[] cc = new byte[ciph[byte_size].length + cp.length];
+                System.arraycopy(ciph[byte_size], 0, cc, 0, ciph[byte_size].length);
+                System.arraycopy(cp, 0, cc, ciph[byte_size].length, cp.length);
+            }
+            randAccIn.close();
+            
+            System.out.println("Success decrypting");
+            
+            int response = JOptionPane.showConfirmDialog(null, "Decrypt Done !!", "", JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
+            
+            // menyimpan file output
+            if(response == JOptionPane.OK_OPTION){
+                
+                RandomAccessFile randAccOut = new RandomAccessFile(plainwrite, "rw");
+                    for(int p = 0; p < out.length; p++){
+                        randAccOut.write(out[p]);
+                    }
+                    randAccOut.close();
+            }
+            
+        }catch(Exception ex){
+            Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void textField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField5ActionPerformed
@@ -556,35 +651,13 @@ public class Tampilan extends javax.swing.JFrame {
                         
                         // menyimpan file output
                         if(response == JOptionPane.OK_OPTION){
-                            //*
                             RandomAccessFile randAccOut = new RandomAccessFile(cipher, "rw");
                             for(int p = 0; p < out.length; p++){
                                 randAccOut.write(out[p]);
-                                /*
-                                for(int q = 0; q < out[p].length; q++){
-                                    randAccOut.write(out[p][q]);
-                                    System.out.println (out[p][q]);
-                                }
-                                */
                             }
                             randAccOut.close();
-                            /*
-                            FileOutputStream stream = new FileOutputStream(cipher);
-                            try {
-                                for(int p = 0; p < out.length; p++){
-                                    for(int q = 0; q < out[p].length; q++){
-                                        //randAccOut.write(out[p][q]);
-                                        stream.write(out[p][q]);
-                                        // System.out.println (out[p][q]);
-                                    }
-                                }
-                                
-                            } finally {
-                                stream.close();
-                            }*/
+                            
                         }
-                
-            //}
             
         } catch (Exception ex) {
              Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
@@ -627,7 +700,6 @@ public class Tampilan extends javax.swing.JFrame {
         }
         else if(jComboBox1.getSelectedItem()=="12345678901234567890123456789012"){
             String iv = "12345678901234567890123456789012";
-            //byte[] byteIVPlain = Konversi.hex2byte(iv);
             textField5.setText(iv);
         } 
     }//GEN-LAST:event_jComboBox1ItemStateChanged
@@ -732,6 +804,17 @@ public class Tampilan extends javax.swing.JFrame {
 	return c;
     }
     
+    private byte[] dekripBlok(byte[] key1, byte[] key2, byte[] b, int y) throws Exception {
+        AES aes= new AES(key2);
+	byte[] t = multiplyAlpha[y];
+	byte[] cc = xortweaktext(t, b);
+	aes= new AES(key1);
+	byte[] pp = aes.decrypt(cc);
+	byte[] p = xortweaktext(t, pp);  
+		
+	return p;
+    }
+    
     public void multiplyAlpha(byte[] tweakEncrypt) {
         byte[][] multiplyDP = new byte[byte_size + 1][block_size];
         multiplyDP[0] = tweakEncrypt;
@@ -751,12 +834,10 @@ public class Tampilan extends javax.swing.JFrame {
     	}
     	return result;
     }
+
+    
     
 }
-
-
-
-
 class AES {
 	
 	private String keyHex;
