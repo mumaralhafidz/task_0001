@@ -14,12 +14,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
 import java.io.RandomAccessFile;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
@@ -731,7 +726,8 @@ public class Tampilan extends javax.swing.JFrame {
 class AES {
 	
 	private String keyHex;
-
+        public static final char[] HEX_DIGITS = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+        
 	//Constructor, masukan key untuk AES
 	public AES(byte[] keyHex) {
 		this.keyHex = byteArrayTohexString(keyHex);
@@ -739,10 +735,10 @@ class AES {
 	}
 	
 	/*
-	 * method enkripsi dengan AES java library
-	 * @return byte[] hasil enkripsi
+	 * AES enkripsi
+	 * 
 	 */
-	public byte[] encrypt(byte[] textHex)throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+	public byte[] encrypt(byte[] textHex)throws Exception {
 		SecretKey key = new SecretKeySpec(DatatypeConverter.parseHexBinary(keyHex), "AES");
 			
 		Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
@@ -754,10 +750,10 @@ class AES {
 	}
 	
 	/*
-	 * method dekripsi dengan AES java library
-	 * @return byte[] hasil dekripsi
+	 * AES dekripsi
+	 * 
 	 */
-	public byte[] decrypt(byte[] textHex)throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+	public byte[] decrypt(byte[] textHex)throws Exception {
 		
 		SecretKey key = new SecretKeySpec(DatatypeConverter.parseHexBinary(keyHex), "AES");
 			
@@ -767,36 +763,18 @@ class AES {
 		byte[] result = cipher.doFinal(DatatypeConverter.parseHexBinary(byteArrayTohexString(textHex)));
 			
 		return result;
-	}	
-	
-    public static String byteArrayTohexString(byte[] b)
-    {
-
-     // String Buffer can be used instead
-
-       String hs = "";
-       String stmp = "";
-
-       for (int n = 0; n < b.length; n++)
-       {
-          stmp = (java.lang.Integer.toHexString(b[n] & 0XFF));
-
-          if (stmp.length() == 1)
-          {
-             hs = hs + "0" + stmp;
-          }
-          else
-          {
-             hs = hs + stmp;
-          }
-
-          if (n < b.length - 1)
-          {
-             hs = hs + "";
-          }
-       }
-
-       return hs;
-    }
+        }
+        
+        public static String byteArrayTohexString (byte[] ba) {
+		 int length = ba.length;
+	     char[] buf = new char[length * 2];
+	     for (int i = 0, j = 0, k; i < length; ) {
+	         k = ba[i++];
+	         buf[j++] = HEX_DIGITS[(k >>> 4) & 0x0F];
+	         buf[j++] = HEX_DIGITS[ k        & 0x0F];
+	     }
+	     return new String(buf);
+	}
+    
         
 }
