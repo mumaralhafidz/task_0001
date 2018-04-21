@@ -7,6 +7,7 @@ package xts_aes;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -30,8 +31,11 @@ public class Tampilan extends javax.swing.JFrame {
      * Creates new form Tampilan
      */
     
-    private String cipher;
-    
+    private String cipher = "out.enc";
+    public int block_size = 16;
+    public int byte_size;
+    public byte[][] multiplyAlpha;
+        
     public Tampilan() {
         initComponents();     
     }
@@ -376,11 +380,7 @@ public class Tampilan extends javax.swing.JFrame {
     // inisilisasi File Chooser        
     JFileChooser pilih = new JFileChooser();
     // inisialisasi size block
-    int block_size = 16;
     
-    int byte_size;
-    
-    byte[][] multiplyAlpha;
     
     private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField1ActionPerformed
         // TODO add your handling code here:
@@ -464,7 +464,7 @@ public class Tampilan extends javax.swing.JFrame {
             String keyPlain = textField1.getText();
             BufferedReader bf = new BufferedReader(new FileReader(keyPlain));
             String bacakeyPlain = bf.readLine();
-            System.out.println("bacakeyPlain : " + bacakeyPlain);
+            // System.out.println("bacakeyPlain : " + bacakeyPlain);
             
             //if(keyPlain.length() != 32){
                 //JOptionPane.showMessageDialog(null, "Key must be 256 bits");
@@ -472,21 +472,23 @@ public class Tampilan extends javax.swing.JFrame {
             // membagi dua key menjadi key1 dan key2
                     String namakeyPlain1 = bacakeyPlain.substring(0, key_length / 2);
                     String namakeyPlain2 = bacakeyPlain.substring(key_length / 2);
-                    System.out.println("namakeyPlain1 : " + namakeyPlain1);
-                    System.out.println("namakeyPlain2 : " + namakeyPlain2);
+                    // System.out.println("namakeyPlain1 : " + namakeyPlain1);
+                    // System.out.println("namakeyPlain2 : " + namakeyPlain2);
                     
                     // convert string to bytes
                     byte[] keyPlain1 = Konversi.hexStringTobyteArray(namakeyPlain1);
                     byte[] keyPlain2 = Konversi.hexStringTobyteArray(namakeyPlain2);
-                    System.out.println("keyPlain1 : " + keyPlain1);
-                    System.out.println("keyPlain2 :" + keyPlain2);
+                    // System.out.println("keyPlain1 : " + keyPlain1);
+                    // System.out.println("keyPlain2 :" + keyPlain2);
                     bf.close();
                     
                     
                     AES aes = new AES(keyPlain2);
                     String z = textField5.getText();
                     byte[] iv = Konversi.hexStringTobyteArray(z);
-                    multiplyAlpha(aes.encrypt(iv));
+                    int iv_length = z.length();
+                    // System.out.println("iv_length : " + iv_length);
+                 
                     
                     
                     // mengambil input
@@ -495,34 +497,35 @@ public class Tampilan extends javax.swing.JFrame {
                         
                         // menghitung panjang file input
                         long input_length = randAccIn.length();
-                        System.out.println("input_length : " + input_length);
+                        // System.out.println("input_length : " + input_length);
                         
                         // menghitung byte size
-                        int byte_size = (int) (input_length / block_size);
+                        this.byte_size = (int) (input_length / block_size);
                         int end_block = (int) (input_length % block_size);
-                        System.out.println("byte_size : " + byte_size);
-                        System.out.println("end_block : " + end_block);
+                        // System.out.println("byte_size : " + byte_size);
+                        // System.out.println("end_block : " + end_block);
+                        
+                        multiplyAlpha(aes.encrypt(iv));
                         
                         //
                         byte[][] in = new byte[byte_size + 1][block_size];
                         in[byte_size] = new byte[end_block];
-                        System.out.println("in[byte_size] : " + in[byte_size]);
+                        // System.out.println("in[byte_size] : " + in[byte_size]);
                         
                         //
                         byte[][] out = new byte[byte_size + 1][block_size];
                         out[byte_size] = new byte[end_block];
-                        System.out.println("out[byte_size] : " + out[byte_size]);
+                        // System.out.println("out[byte_size] : " + out[byte_size]);
                         
                         //
                         for(int a = 0; a < in.length; a++){
                             randAccIn.read(in[a]);
-                            System.out.println("randAccIn.read(in[a]) : " + randAccIn.read(in[a]));
                         }
                         
                         //
                         for(int x = 0; x <= byte_size - 2; x++){
+                            // System.out.println ("Call encrBlok : " + x);
                             out[x] = enkripBlok(keyPlain1, keyPlain2, in[x], x);
-                            System.out.println("out[x] : " + out[x]);
                         }
                         
                         // Jika tidak ada proses stealing
@@ -533,6 +536,7 @@ public class Tampilan extends javax.swing.JFrame {
 
                         // Jika terjadi stealing
                         else{
+                            System.out.println ("Stealing");
                             byte[] cc = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
                             System.arraycopy(cc, 0, out[byte_size], 0, end_block);
                             byte[] cp = new byte[block_size - end_block];
@@ -541,23 +545,43 @@ public class Tampilan extends javax.swing.JFrame {
                             }
                             byte[] pp = new byte[in[byte_size].length + cp.length];
                             System.arraycopy(in[byte_size], 0, pp, 0, in[byte_size].length);
-                            System.arraycopy(cp, 0, pp, 0, in[byte_size].length);
+                            System.arraycopy(cp, 0, pp, in[byte_size].length, cp.length);
                         }
                         randAccIn.close();
+                        
+                        System.out.println ("Success encrypting");
                         
                         //}  
                         int response = JOptionPane.showConfirmDialog(null, "Encrypt Done !!", "", JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
                         
                         // menyimpan file output
                         if(response == JOptionPane.OK_OPTION){
-                            
+                            //*
                             RandomAccessFile randAccOut = new RandomAccessFile(cipher, "rw");
                             for(int p = 0; p < out.length; p++){
+                                randAccOut.write(out[p]);
+                                /*
                                 for(int q = 0; q < out[p].length; q++){
                                     randAccOut.write(out[p][q]);
+                                    System.out.println (out[p][q]);
                                 }
-                                randAccOut.close();
+                                */
                             }
+                            randAccOut.close();
+                            /*
+                            FileOutputStream stream = new FileOutputStream(cipher);
+                            try {
+                                for(int p = 0; p < out.length; p++){
+                                    for(int q = 0; q < out[p].length; q++){
+                                        //randAccOut.write(out[p][q]);
+                                        stream.write(out[p][q]);
+                                        // System.out.println (out[p][q]);
+                                    }
+                                }
+                                
+                            } finally {
+                                stream.close();
+                            }*/
                         }
                 
             //}
@@ -585,7 +609,7 @@ public class Tampilan extends javax.swing.JFrame {
             File ivPlain = pilih.getSelectedFile();
             // nama file yang dipilih beserta direktori nya
             String namaIVPlain = ivPlain.getAbsolutePath();
-            System.out.println(namaIVPlain);
+            // System.out.println(namaIVPlain);
                         
             File file = new File(namaIVPlain);
             try {
@@ -697,11 +721,11 @@ public class Tampilan extends javax.swing.JFrame {
     private java.awt.TextField textField6;
     // End of variables declaration//GEN-END:variables
 
-    public byte[] enkripBlok(byte[] key1, byte[] key2, byte[] b, int x) throws Exception {
-        AES aes= new AES(key2);
-        byte[] t = multiplyAlpha[x];
+    public byte[] enkripBlok(byte[] key1, byte[] key2, byte[] b, int y) throws Exception {
+        AES aes = new AES(key2);
+        byte[] t = multiplyAlpha[y];
 	byte[] pp = xortweaktext(t, b); 
-	aes= new AES(key1);
+	aes = new AES(key1);
 	byte[] cc = aes.encrypt(pp);
 	byte[] c = xortweaktext(t, cc);  
 		
