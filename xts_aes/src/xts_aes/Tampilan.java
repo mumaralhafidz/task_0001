@@ -459,54 +459,70 @@ public class Tampilan extends javax.swing.JFrame {
             // TODO add your handling code here:
             this.cipher = cipher;
             // inisialisasi panjang key
-            int key_length = 32;
+            int key_length = 64;
             // mengambil nilai key untuk plaintext
             String keyPlain = textField1.getText();
-                    
+            BufferedReader bf = new BufferedReader(new FileReader(keyPlain));
+            String bacakeyPlain = bf.readLine();
+            System.out.println("bacakeyPlain : " + bacakeyPlain);
+            
             //if(keyPlain.length() != 32){
                 //JOptionPane.showMessageDialog(null, "Key must be 256 bits");
             //}else{
-                            
-                    // membagi dua key menjadi key1 dan key2
-                    String namakeyPlain1 = keyPlain.substring(0, key_length / 2);
-                    String namakeyPlain2 = keyPlain.substring(key_length / 2);
+            // membagi dua key menjadi key1 dan key2
+                    String namakeyPlain1 = bacakeyPlain.substring(0, key_length / 2);
+                    String namakeyPlain2 = bacakeyPlain.substring(key_length / 2);
+                    System.out.println("namakeyPlain1 : " + namakeyPlain1);
+                    System.out.println("namakeyPlain2 : " + namakeyPlain2);
                     
                     // convert string to bytes
-                    byte[] keyPlain1 = namakeyPlain1.getBytes();
-                    byte[] keyPlain2 = namakeyPlain2.getBytes();
+                    byte[] keyPlain1 = Konversi.hexStringTobyteArray(namakeyPlain1);
+                    byte[] keyPlain2 = Konversi.hexStringTobyteArray(namakeyPlain2);
+                    System.out.println("keyPlain1 : " + keyPlain1);
+                    System.out.println("keyPlain2 :" + keyPlain2);
+                    bf.close();
+                    
                     
                     AES aes = new AES(keyPlain2);
                     String z = textField5.getText();
-                    byte[] iv = z.getBytes();
+                    byte[] iv = Konversi.hexStringTobyteArray(z);
                     multiplyAlpha(aes.encrypt(iv));
                     
-                        // mengambil input
+                    
+                    // mengambil input
                         String plain = textField2.getText();
                         RandomAccessFile randAccIn = new RandomAccessFile(plain, "r");
                         
                         // menghitung panjang file input
                         long input_length = randAccIn.length();
+                        System.out.println("input_length : " + input_length);
                         
                         // menghitung byte size
                         int byte_size = (int) (input_length / block_size);
                         int end_block = (int) (input_length % block_size);
+                        System.out.println("byte_size : " + byte_size);
+                        System.out.println("end_block : " + end_block);
                         
                         //
                         byte[][] in = new byte[byte_size + 1][block_size];
                         in[byte_size] = new byte[end_block];
+                        System.out.println("in[byte_size] : " + in[byte_size]);
                         
                         //
                         byte[][] out = new byte[byte_size + 1][block_size];
                         out[byte_size] = new byte[end_block];
+                        System.out.println("out[byte_size] : " + out[byte_size]);
                         
                         //
                         for(int a = 0; a < in.length; a++){
                             randAccIn.read(in[a]);
+                            System.out.println("randAccIn.read(in[a]) : " + randAccIn.read(in[a]));
                         }
                         
                         //
                         for(int x = 0; x <= byte_size - 2; x++){
                             out[x] = enkripBlok(keyPlain1, keyPlain2, in[x], x);
+                            System.out.println("out[x] : " + out[x]);
                         }
                         
                         // Jika tidak ada proses stealing
@@ -514,7 +530,7 @@ public class Tampilan extends javax.swing.JFrame {
                             out[byte_size - 1] = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
                             out[byte_size] = new byte[0];
                         }
-                        
+
                         // Jika terjadi stealing
                         else{
                             byte[] cc = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
@@ -545,6 +561,7 @@ public class Tampilan extends javax.swing.JFrame {
                         }
                 
             //}
+            
         } catch (Exception ex) {
              Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -586,7 +603,7 @@ public class Tampilan extends javax.swing.JFrame {
         }
         else if(jComboBox1.getSelectedItem()=="12345678901234567890123456789012"){
             String iv = "12345678901234567890123456789012";
-            byte[] byteIVPlain = iv.getBytes();
+            //byte[] byteIVPlain = Konversi.hex2byte(iv);
             textField5.setText(iv);
         } 
     }//GEN-LAST:event_jComboBox1ItemStateChanged
@@ -711,13 +728,6 @@ public class Tampilan extends javax.swing.JFrame {
     	return result;
     }
     
-    /**
-    public byte[] encrypt(byte[] Hex)throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        key_before = 
-        SecretKey key = new SecretKeySpec(DatatypeConverter.parseHexBinary(key))
-    
-    }
-    **/
 }
 
 
@@ -726,11 +736,10 @@ public class Tampilan extends javax.swing.JFrame {
 class AES {
 	
 	private String keyHex;
-        public static final char[] HEX_DIGITS = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
-        
+                
 	//Constructor, masukan key untuk AES
 	public AES(byte[] keyHex) {
-		this.keyHex = byteArrayTohexString(keyHex);
+		this.keyHex = Konversi.toHEX1(keyHex);
                 
 	}
 	
@@ -744,7 +753,7 @@ class AES {
 		Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
 		cipher.init(Cipher.ENCRYPT_MODE, key);
 			
-		byte[] result = cipher.doFinal(DatatypeConverter.parseHexBinary(byteArrayTohexString(textHex)));
+		byte[] result = cipher.doFinal(DatatypeConverter.parseHexBinary(Konversi.toHEX1(textHex)));
 			
 		return result;
 	}
@@ -760,12 +769,40 @@ class AES {
 		Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
 		cipher.init(Cipher.DECRYPT_MODE, key);
 			
-		byte[] result = cipher.doFinal(DatatypeConverter.parseHexBinary(byteArrayTohexString(textHex)));
+		byte[] result = cipher.doFinal(DatatypeConverter.parseHexBinary(Konversi.toHEX1(textHex)));
 			
 		return result;
         }
+    
         
-        public static String byteArrayTohexString (byte[] ba) {
+}
+
+
+class Konversi {
+    
+    public static final char[] HEX_DIGITS = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+	
+	/*
+	 * Method untuk mengubah suatu string menjadi byte[]
+	 * @param : str adalah string yang akan diubah menjadi tipe data array of byte
+	 * @return array of byte
+	 */
+	public static byte[] hexStringTobyteArray(String str) {
+            byte[] b = new byte[str.length() / 2];
+            for (int i = 0; i < b.length; i++) {
+                int index = i * 2;
+                int v = Integer.parseInt(str.substring(index, index + 2), 16);
+                b[i] = (byte) v;
+            }
+            return b;
+        }
+	
+	/*
+	 * Method untuk mengubah bentuk array of byte menjadi String
+	 * @param : ba adalah array of byte yang akan diubah menjadi tipe data String
+	 * @return String hasil convert
+	 */
+	 public static String toHEX1 (byte[] ba) {
 		 int length = ba.length;
 	     char[] buf = new char[length * 2];
 	     for (int i = 0, j = 0, k; i < length; ) {
@@ -775,6 +812,5 @@ class AES {
 	     }
 	     return new String(buf);
 	}
-    
-        
+
 }
