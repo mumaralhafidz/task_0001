@@ -36,7 +36,7 @@ public class Tampilan extends javax.swing.JFrame {
      */
     
     private String cipher = "out.enc";
-    private String plainwrite = "plain.dec";
+    private String plainwrite = "plain.enc";
     public int block_size = 16;
     public int byte_size;
     public byte[][] multiplyAlpha;
