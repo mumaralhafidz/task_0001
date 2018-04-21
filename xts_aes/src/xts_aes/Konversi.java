@@ -2,23 +2,27 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package xts_aes;
 
 /**
  *
  * @author Anggi
  */
+
 public class Konversi {
-    public static byte[] hexStringToByteArray(String str)
-    {
-       byte[] bytes = new byte[str.length() / 2];
-       for (int i = 0; i < bytes.length; i++)
-       {
-          bytes[i] = (byte) Integer
-                .parseInt(str.substring(2 * i, 2 * i + 2), 16);
-       }
-       return bytes;
+    public static byte[] hexStringToByteArray(String hexString){
+    byte[] bytes = new byte[hexString.length() / 2];
+
+    for(int i = 0; i < hexString.length(); i += 2){
+        String sub = hexString.substring(i, i + 2);
+        Integer intVal = Integer.parseInt(sub, 16);
+        bytes[i / 2] = intVal.byteValue();
+        String hex = "".format("0x%x", bytes[i / 2]);
     }
+
+    return bytes;
+}
 
 // Convert Byte Arrary to Hex String
     public static String byteArrayTohexString(byte[] b)
@@ -49,10 +53,6 @@ public class Konversi {
        }
 
        return hs;
-    }
-
-    static String hexStringToByteArray(byte[] key) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

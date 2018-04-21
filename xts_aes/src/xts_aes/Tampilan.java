@@ -34,6 +34,9 @@ public class Tampilan extends javax.swing.JFrame {
     /**
      * Creates new form Tampilan
      */
+    
+    private String cipher;
+    
     public Tampilan() {
         initComponents();     
     }
@@ -457,122 +460,100 @@ public class Tampilan extends javax.swing.JFrame {
     }//GEN-LAST:event_textField5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        // inisialisasi panjang key
-        int key_length = 32;
-        // mengambil nilai key untuk plaintext
-        String keyPlain = textField1.getText();
-                
-        if(keyPlain.length() != 32){
-            JOptionPane.showMessageDialog(null, "Key must be 256 bits");
-        }
-        else {
-            // membagi dua key menjadi key1 dan key2
-            String namakeyPlain1 = keyPlain.substring(0, key_length / 2);
-            String namakeyPlain2 = keyPlain.substring(key_length / 2);
-        
-            // convert string to bytes
-            byte[] keyPlain1 = Konversi.hexStringToByteArray(namakeyPlain1);
-            byte[] keyPlain2 = Konversi.hexStringToByteArray(namakeyPlain2);
-            
-            AES aes = new AES(keyPlain2);
-            String z = textField5.getText();
-            byte[] iv = Konversi.hexStringToByteArray(z);
-            try {
-                multiplyAlpha(aes.encrypt(iv));
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchPaddingException ex) {
-                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvalidKeyException ex) {
-                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalBlockSizeException ex) {
-                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (BadPaddingException ex) {
-                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-            }
-                
-            try {
-                // mengambil input
-                String plain = textField2.getText();
-                RandomAccessFile randAccIn = new RandomAccessFile(plain, "r");
-                
-                // menghitung panjang file input
-                long input_length = randAccIn.length();
-                
-                // menghitung byte size
-                int byte_size = (int) (input_length / block_size);
-                int end_block = (int) (input_length % block_size);
-                
-                //
-                byte[][] in = new byte[byte_size + 1][block_size];
-                in[byte_size] = new byte[end_block];
-                
-                //
-                byte[][] out = new byte[byte_size + 1][block_size];
-                out[byte_size] = new byte[end_block];
-                
-                //
-                for(int a = 0; a < in.length; a++){
-                    randAccIn.read(in[a]);
-                }
-                
-                //
-                for(int x = 0; x <= byte_size - 2; x++){
-                    out[x] = enkripBlok(keyPlain1, keyPlain2, in[x], x);
-                }
-                
-                // Jika tidak ada proses stealing
-                if(end_block == 0){
-                    out[byte_size - 1] = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
-                    out[byte_size] = new byte[0];
-                }
-                
-                // Jika terjadi stealing
-                else{
-                    byte[] cc = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
-                    System.arraycopy(cc, 0, out[byte_size], 0, end_block);
-                    byte[] cp = new byte[block_size - end_block];
-                    for(int y = end_block; y < block_size; y++){
-                        cp[y - end_block] = cc[y];
-                    }
-                    byte[] pp = new byte[in[byte_size].length + cp.length];
-                    System.arraycopy(in[byte_size], 0, pp, 0, in[byte_size].length);
-                    System.arraycopy(cp, 0, pp, 0, in[byte_size].length);
-                }
-                randAccIn.close();
-                
-                // informasi tentang telah selesai melakukan enkripsi
-                int response = JOptionPane.showConfirmDialog(null, "Encrypt Done !!", "", JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
-                
-                // menyimpan file output
-                if(response == JOptionPane.OK_OPTION){
-                    String cipher = textField2.getText();
-                    RandomAccessFile randAccOut = new RandomAccessFile(cipher, "rw");
-                    for(int p = 0; p < out.length; p++){
-                        for(int q = 0; q < out[p].length; q++){
-                            randAccOut.write(out[p][q]);
+        try {
+            // TODO add your handling code here:
+            this.cipher = cipher;
+            // inisialisasi panjang key
+            int key_length = 32;
+            // mengambil nilai key untuk plaintext
+            String keyPlain = textField1.getText();
+                    
+            //if(keyPlain.length() != 32){
+                //JOptionPane.showMessageDialog(null, "Key must be 256 bits");
+            //}else{
+                            
+                    // membagi dua key menjadi key1 dan key2
+                    String namakeyPlain1 = keyPlain.substring(0, key_length / 2);
+                    String namakeyPlain2 = keyPlain.substring(key_length / 2);
+                    
+                    // convert string to bytes
+                    byte[] keyPlain1 = namakeyPlain1.getBytes();
+                    byte[] keyPlain2 = namakeyPlain2.getBytes();
+                    
+                    AES aes = new AES(keyPlain2);
+                    String z = textField5.getText();
+                    byte[] iv = z.getBytes();
+                    multiplyAlpha(aes.encrypt(iv));
+                    
+                        // mengambil input
+                        String plain = textField2.getText();
+                        RandomAccessFile randAccIn = new RandomAccessFile(plain, "r");
+                        
+                        // menghitung panjang file input
+                        long input_length = randAccIn.length();
+                        
+                        // menghitung byte size
+                        int byte_size = (int) (input_length / block_size);
+                        int end_block = (int) (input_length % block_size);
+                        
+                        //
+                        byte[][] in = new byte[byte_size + 1][block_size];
+                        in[byte_size] = new byte[end_block];
+                        
+                        //
+                        byte[][] out = new byte[byte_size + 1][block_size];
+                        out[byte_size] = new byte[end_block];
+                        
+                        //
+                        for(int a = 0; a < in.length; a++){
+                            randAccIn.read(in[a]);
                         }
-                        randAccOut.close();
-                    }
-                }
+                        
+                        //
+                        for(int x = 0; x <= byte_size - 2; x++){
+                            out[x] = enkripBlok(keyPlain1, keyPlain2, in[x], x);
+                        }
+                        
+                        // Jika tidak ada proses stealing
+                        if(end_block == 0){
+                            out[byte_size - 1] = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
+                            out[byte_size] = new byte[0];
+                        }
+                        
+                        // Jika terjadi stealing
+                        else{
+                            byte[] cc = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
+                            System.arraycopy(cc, 0, out[byte_size], 0, end_block);
+                            byte[] cp = new byte[block_size - end_block];
+                            for(int y = end_block; y < block_size; y++){
+                                cp[y - end_block] = cc[y];
+                            }
+                            byte[] pp = new byte[in[byte_size].length + cp.length];
+                            System.arraycopy(in[byte_size], 0, pp, 0, in[byte_size].length);
+                            System.arraycopy(cp, 0, pp, 0, in[byte_size].length);
+                        }
+                        randAccIn.close();
+                        
+                        //}  
+                        int response = JOptionPane.showConfirmDialog(null, "Encrypt Done !!", "", JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
+                        
+                        // menyimpan file output
+                        if(response == JOptionPane.OK_OPTION){
+                            
+                            RandomAccessFile randAccOut = new RandomAccessFile(cipher, "rw");
+                            for(int p = 0; p < out.length; p++){
+                                for(int q = 0; q < out[p].length; q++){
+                                    randAccOut.write(out[p][q]);
+                                }
+                                randAccOut.close();
+                            }
+                        }
                 
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchPaddingException ex) {
-                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvalidKeyException ex) {
-                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalBlockSizeException ex) {
-                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (BadPaddingException ex) {
-                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            //}
+        } catch (Exception ex) {
+             Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void textField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField6ActionPerformed
@@ -610,7 +591,7 @@ public class Tampilan extends javax.swing.JFrame {
         }
         else if(jComboBox1.getSelectedItem()=="12345678901234567890123456789012"){
             String iv = "12345678901234567890123456789012";
-            byte[] byteIVPlain = Konversi.hexStringToByteArray(iv);
+            byte[] byteIVPlain = iv.getBytes();
             textField5.setText(iv);
         } 
     }//GEN-LAST:event_jComboBox1ItemStateChanged
@@ -704,7 +685,7 @@ public class Tampilan extends javax.swing.JFrame {
     private java.awt.TextField textField6;
     // End of variables declaration//GEN-END:variables
 
-    private byte[] enkripBlok(byte[] key1, byte[] key2, byte[] b, int x) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    public byte[] enkripBlok(byte[] key1, byte[] key2, byte[] b, int x) throws Exception {
         AES aes= new AES(key2);
         byte[] t = multiplyAlpha[x];
 	byte[] pp = xortweaktext(t, b); 
@@ -734,6 +715,14 @@ public class Tampilan extends javax.swing.JFrame {
     	}
     	return result;
     }
+    
+    /**
+    public byte[] encrypt(byte[] Hex)throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        key_before = 
+        SecretKey key = new SecretKeySpec(DatatypeConverter.parseHexBinary(key))
+    
+    }
+    **/
 }
 
 
@@ -741,11 +730,12 @@ public class Tampilan extends javax.swing.JFrame {
 
 class AES {
 	
-	private String Key;
+	private String keyHex;
 
 	//Constructor, masukan key untuk AES
-	public AES(byte[] key) {
-		this.Key = Konversi.hexStringToByteArray(key);
+	public AES(byte[] keyHex) {
+		this.keyHex = byteArrayTohexString(keyHex);
+                
 	}
 	
 	/*
@@ -753,12 +743,12 @@ class AES {
 	 * @return byte[] hasil enkripsi
 	 */
 	public byte[] encrypt(byte[] textHex)throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-		SecretKey key = new SecretKeySpec(DatatypeConverter.parseHexBinary(Key), "AES");
+		SecretKey key = new SecretKeySpec(DatatypeConverter.parseHexBinary(keyHex), "AES");
 			
 		Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
 		cipher.init(Cipher.ENCRYPT_MODE, key);
 			
-		byte[] result = cipher.doFinal(DatatypeConverter.parseHexBinary(Konversi.byteArrayTohexString(textHex)));
+		byte[] result = cipher.doFinal(DatatypeConverter.parseHexBinary(byteArrayTohexString(textHex)));
 			
 		return result;
 	}
@@ -769,14 +759,44 @@ class AES {
 	 */
 	public byte[] decrypt(byte[] textHex)throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 		
-		SecretKey key = new SecretKeySpec(DatatypeConverter.parseHexBinary(Key), "AES");
+		SecretKey key = new SecretKeySpec(DatatypeConverter.parseHexBinary(keyHex), "AES");
 			
 		Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
 		cipher.init(Cipher.DECRYPT_MODE, key);
 			
-		byte[] result = cipher.doFinal(DatatypeConverter.parseHexBinary(Konversi.byteArrayTohexString(textHex)));
+		byte[] result = cipher.doFinal(DatatypeConverter.parseHexBinary(byteArrayTohexString(textHex)));
 			
 		return result;
-	}
+	}	
+	
+    public static String byteArrayTohexString(byte[] b)
+    {
 
+     // String Buffer can be used instead
+
+       String hs = "";
+       String stmp = "";
+
+       for (int n = 0; n < b.length; n++)
+       {
+          stmp = (java.lang.Integer.toHexString(b[n] & 0XFF));
+
+          if (stmp.length() == 1)
+          {
+             hs = hs + "0" + stmp;
+          }
+          else
+          {
+             hs = hs + stmp;
+          }
+
+          if (n < b.length - 1)
+          {
+             hs = hs + "";
+          }
+       }
+
+       return hs;
+    }
+        
 }
