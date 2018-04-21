@@ -290,11 +290,14 @@
                   <Font name="Century Schoolbook" size="16" style="0"/>
                 </Property>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value=""/>
+                  <StringArray count="7">
+                    <StringItem index="0" value="Pilih IV"/>
                     <StringItem index="1" value="Browse File"/>
                     <StringItem index="2" value="12345678901234567890123456789012"/>
-                    <StringItem index="3" value="Item 4"/>
+                    <StringItem index="3" value="21098765432109876543210987654321"/>
+                    <StringItem index="4" value="11112222333444555666777888999000"/>
+                    <StringItem index="5" value="98542173060965218743086429753178"/>
+                    <StringItem index="6" value="77983467093215688930892529176052"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -493,11 +496,14 @@
                   <Font name="Century Schoolbook" size="16" style="0"/>
                 </Property>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value=""/>
+                  <StringArray count="7">
+                    <StringItem index="0" value="Pilih IV"/>
                     <StringItem index="1" value="Browse File"/>
                     <StringItem index="2" value="12345678901234567890123456789012"/>
-                    <StringItem index="3" value="Item 4"/>
+                    <StringItem index="3" value="21098765432109876543210987654321"/>
+                    <StringItem index="4" value="11112222333444555666777888999000"/>
+                    <StringItem index="5" value="98542173060965218743086429753178"/>
+                    <StringItem index="6" value="77983467093215688930892529176052"/>
                   </StringArray>
                 </Property>
               </Properties>

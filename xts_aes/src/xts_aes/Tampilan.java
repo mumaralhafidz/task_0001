@@ -186,7 +186,7 @@ public class Tampilan extends javax.swing.JFrame {
         jLayeredPane1.add(jLabel13, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jComboBox1.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Browse File", "12345678901234567890123456789012", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pilih IV", "Browse File", "12345678901234567890123456789012", "21098765432109876543210987654321", "11112222333444555666777888999000", "98542173060965218743086429753178", "77983467093215688930892529176052" }));
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox1ItemStateChanged(evt);
@@ -293,7 +293,7 @@ public class Tampilan extends javax.swing.JFrame {
         jLayeredPane2.add(textField6, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jComboBox2.setFont(new java.awt.Font("Century Schoolbook", 0, 16)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Browse File", "12345678901234567890123456789012", "Item 4" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pilih IV", "Browse File", "12345678901234567890123456789012", "21098765432109876543210987654321", "11112222333444555666777888999000", "98542173060965218743086429753178", "77983467093215688930892529176052" }));
         jComboBox2.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox2ItemStateChanged(evt);
@@ -384,7 +384,6 @@ public class Tampilan extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     // inisilisasi File Chooser        
     JFileChooser pilih = new JFileChooser();
-    // inisialisasi size block
     
     
     private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField1ActionPerformed
@@ -399,10 +398,13 @@ public class Tampilan extends javax.swing.JFrame {
         // TODO add your handling code here:
         // membuka direktori
         pilih.showOpenDialog(null);
+        
         // memilih file
         File plain = pilih.getSelectedFile();
+        
         // nama file yang dipilih beserta direktori nya
         String namaFilePlain = plain.getAbsolutePath();
+        
         // menampilkan direktori dan file yang di pilih dalam berbentuk tulisan di textfile
         textField2.setText(namaFilePlain);
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -411,10 +413,13 @@ public class Tampilan extends javax.swing.JFrame {
         // TODO add your handling code here:
         // membuka direktori
         pilih.showOpenDialog(null);
+        
         // memilih file
         File keyPlain = pilih.getSelectedFile();
+        
         // nama file yang dipilih beserta direktori nya
         String namaKeyPlain = keyPlain.getAbsolutePath();
+        
         // menampilkan direktori dan file yang di pilih dalam berbentuk tulisan di textfile
         textField1.setText(namaKeyPlain);             
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -423,10 +428,13 @@ public class Tampilan extends javax.swing.JFrame {
         // TODO add your handling code here:
         // membuka direktori
         pilih.showOpenDialog(null);
+        
         // memilih file
         File keycipher = pilih.getSelectedFile();
+        
         // nama file yang dipilih beserta direktori nya
         String namaFileKeyCipher = keycipher.getAbsolutePath();
+        
         // menampilkan direktori dan file yang di pilih dalam berbentuk tulisan di textfile
         textField3.setText(namaFileKeyCipher);
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -443,10 +451,13 @@ public class Tampilan extends javax.swing.JFrame {
         // TODO add your handling code here:
         // membuka direktori
         pilih.showOpenDialog(null);
+        
         // memilih file
         File cipher = pilih.getSelectedFile();
+        
         // nama file yang dipilih beserta direktori nya
         String namaFileCipher = cipher.getAbsolutePath();
+        
         // menampilkan direktori dan file yang di pilih dalam berbentuk tulisan di textfile
         textField4.setText(namaFileCipher);
     }//GEN-LAST:event_jButton7ActionPerformed
@@ -454,11 +465,15 @@ public class Tampilan extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         try{
             // TODO add your handling code here:
-        
+            // deklarasi file penyimpanan
+            this.plainwrite = plainwrite;
+            
             // inisialisasi panjang key
             int key_length = 64;
+            
             // mengambil direktori key
             String keyCipher = textField3.getText();
+            
             // mengambil nilai menggunakan buffered reader
             BufferedReader bf = new BufferedReader(new FileReader(keyCipher));
             String bacakeyCipher = bf.readLine();
@@ -467,16 +482,17 @@ public class Tampilan extends javax.swing.JFrame {
             String namakeyCipher1 = bacakeyCipher.substring(0, key_length / 2);
             String namakeyCipher2 = bacakeyCipher.substring(key_length / 2);
             
-            // convert string to byte
+            // convert hex to byte untuk key1 dan key2
             byte[] keyCipher1 = Konversi.hexStringTobyteArray(namakeyCipher1);
             byte[] keyCipher2 = Konversi.hexStringTobyteArray(namakeyCipher2);
             bf.close();
             
+            // Tahap iv, key2 masuk ke tahap AES enkripsi
             AES aes = new AES(keyCipher2);
             String z = textField6.getText();
             byte[] iv = Konversi.hexStringTobyteArray(z);
-            
-            // mengambil input
+                        
+            // membaca dan mengambil input, file cipher
             String cipher = textField4.getText();
             RandomAccessFile randAccIn = new RandomAccessFile(cipher, "r");
             
@@ -485,27 +501,32 @@ public class Tampilan extends javax.swing.JFrame {
             
             // menghitung byte size
             this.byte_size = (int) (cipher_length / block_size);
+            // blok terakhir
             int end_block = (int) (cipher_length % block_size);
+                        
+            // AES enkripsi xor alpha^j 
             multiplyAlpha(aes.encrypt(iv));
             
-            // 
+            // baca inputan cipher dalam bentuk byte (matriks)
             byte[][] ciph = new byte[byte_size + 1][block_size];
             ciph[byte_size] = new byte[end_block];
             
-            // 
+            // output cipher dalam bentuk byte (matriks)
             byte[][] out = new byte[byte_size + 1][block_size];
             out[byte_size] = new byte[end_block];
             
-            // 
+            // memasukkan data sebanyak panjang ciph
             for(int a = 0; a < ciph.length; a++){
                 randAccIn.read(ciph[a]);
             }
             
-            //
+            // XTS dilakukan hingga sebelum blok terakhir
+            // XTS full dilakukan karena pada blok-blok sebelum blok akhir adalah blok blok yang terisi penuh
             for(int x = 0; x <= byte_size - 2; x++){
                 out[x] = dekripBlok(keyCipher1, keyCipher2, ciph[x], x);
             }
             
+            // Pada blok terakhir
             // Jika tidak ada proses stealing
             if(end_block == 0){
                 out[byte_size - 1] = dekripBlok(keyCipher1, keyCipher2, out[byte_size - 1], byte_size - 1);
@@ -528,6 +549,7 @@ public class Tampilan extends javax.swing.JFrame {
             
             System.out.println("Success decrypting");
             
+            // menampilkan JOptionPane untuk mengetahui proses telah selesai
             int response = JOptionPane.showConfirmDialog(null, "Decrypt Done !!", "", JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
             
             // menyimpan file output
@@ -552,112 +574,107 @@ public class Tampilan extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
             // TODO add your handling code here:
+            // deklarasi file penyimpanan
             this.cipher = cipher;
+            
             // inisialisasi panjang key
             int key_length = 64;
-            // mengambil nilai key untuk plaintext
+            
+            // membaca direktori file
             String keyPlain = textField1.getText();
+            
+            // membaca file menggunakan BufferedReader
             BufferedReader bf = new BufferedReader(new FileReader(keyPlain));
             String bacakeyPlain = bf.readLine();
-            // System.out.println("bacakeyPlain : " + bacakeyPlain);
-            
-            //if(keyPlain.length() != 32){
-                //JOptionPane.showMessageDialog(null, "Key must be 256 bits");
-            //}else{
-            // membagi dua key menjadi key1 dan key2
-                    String namakeyPlain1 = bacakeyPlain.substring(0, key_length / 2);
-                    String namakeyPlain2 = bacakeyPlain.substring(key_length / 2);
-                    // System.out.println("namakeyPlain1 : " + namakeyPlain1);
-                    // System.out.println("namakeyPlain2 : " + namakeyPlain2);
-                    
-                    // convert string to bytes
-                    byte[] keyPlain1 = Konversi.hexStringTobyteArray(namakeyPlain1);
-                    byte[] keyPlain2 = Konversi.hexStringTobyteArray(namakeyPlain2);
-                    // System.out.println("keyPlain1 : " + keyPlain1);
-                    // System.out.println("keyPlain2 :" + keyPlain2);
-                    bf.close();
-                    
-                    
-                    AES aes = new AES(keyPlain2);
-                    String z = textField5.getText();
-                    byte[] iv = Konversi.hexStringTobyteArray(z);
-                    int iv_length = z.length();
-                    // System.out.println("iv_length : " + iv_length);
-                 
-                    
-                    
-                    // mengambil input
-                        String plain = textField2.getText();
-                        RandomAccessFile randAccIn = new RandomAccessFile(plain, "r");
-                        
-                        // menghitung panjang file input
-                        long input_length = randAccIn.length();
-                        // System.out.println("input_length : " + input_length);
-                        
-                        // menghitung byte size
-                        this.byte_size = (int) (input_length / block_size);
-                        int end_block = (int) (input_length % block_size);
-                        // System.out.println("byte_size : " + byte_size);
-                        // System.out.println("end_block : " + end_block);
-                        
-                        multiplyAlpha(aes.encrypt(iv));
-                        
-                        //
-                        byte[][] in = new byte[byte_size + 1][block_size];
-                        in[byte_size] = new byte[end_block];
-                        // System.out.println("in[byte_size] : " + in[byte_size]);
-                        
-                        //
-                        byte[][] out = new byte[byte_size + 1][block_size];
-                        out[byte_size] = new byte[end_block];
-                        // System.out.println("out[byte_size] : " + out[byte_size]);
-                        
-                        //
-                        for(int a = 0; a < in.length; a++){
-                            randAccIn.read(in[a]);
-                        }
-                        
-                        //
-                        for(int x = 0; x <= byte_size - 2; x++){
-                            // System.out.println ("Call encrBlok : " + x);
-                            out[x] = enkripBlok(keyPlain1, keyPlain2, in[x], x);
-                        }
-                        
-                        // Jika tidak ada proses stealing
-                        if(end_block == 0){
-                            out[byte_size - 1] = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
-                            out[byte_size] = new byte[0];
-                        }
 
-                        // Jika terjadi stealing
-                        else{
-                            System.out.println ("Stealing");
-                            byte[] cc = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
-                            System.arraycopy(cc, 0, out[byte_size], 0, end_block);
-                            byte[] cp = new byte[block_size - end_block];
-                            for(int y = end_block; y < block_size; y++){
-                                cp[y - end_block] = cc[y];
-                            }
-                            byte[] pp = new byte[in[byte_size].length + cp.length];
-                            System.arraycopy(in[byte_size], 0, pp, 0, in[byte_size].length);
-                            System.arraycopy(cp, 0, pp, in[byte_size].length, cp.length);
-                        }
-                        randAccIn.close();
+            // membagi key menjadi dua yaitu key1 dan key2
+            String namakeyPlain1 = bacakeyPlain.substring(0, key_length / 2);
+            String namakeyPlain2 = bacakeyPlain.substring(key_length / 2);
+                    
+            // convert string to bytes untuk key1 dan key2
+            byte[] keyPlain1 = Konversi.hexStringTobyteArray(namakeyPlain1);
+            byte[] keyPlain2 = Konversi.hexStringTobyteArray(namakeyPlain2);
+            bf.close();
+                    
+            // Tahap iv, key2 masuk ke tahap AES enkripsi
+            AES aes = new AES(keyPlain2);
+            String z = textField5.getText();
+            byte[] iv = Konversi.hexStringTobyteArray(z);
+            int iv_length = z.length();
+                                
+            // mengambil input
+            String plain = textField2.getText();
+            RandomAccessFile randAccIn = new RandomAccessFile(plain, "r");
                         
-                        System.out.println ("Success encrypting");
+            // menghitung panjang file input
+            long input_length = randAccIn.length();
+            
+            // AES enkripsi xor alpha^j
+            multiplyAlpha(aes.encrypt(iv));
+            
+            // menghitung byte size
+            this.byte_size = (int) (input_length / block_size);
+            
+            // blok terakhir
+            int end_block = (int) (input_length % block_size);
+
+            // AES enkripsi xor alpha^j
+            multiplyAlpha(aes.encrypt(iv));
+            
+            // baca inputan plain dalam bentuk byte (matriks)
+            byte[][] in = new byte[byte_size + 1][block_size];
+            in[byte_size] = new byte[end_block];
                         
-                        //}  
-                        int response = JOptionPane.showConfirmDialog(null, "Encrypt Done !!", "", JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
+            // output plain dalam bentuk byte (matriks)
+            byte[][] out = new byte[byte_size + 1][block_size];
+            out[byte_size] = new byte[end_block];
                         
-                        // menyimpan file output
-                        if(response == JOptionPane.OK_OPTION){
-                            RandomAccessFile randAccOut = new RandomAccessFile(cipher, "rw");
-                            for(int p = 0; p < out.length; p++){
-                                randAccOut.write(out[p]);
-                            }
-                            randAccOut.close();
-                            
-                        }
+            // memasukkan data sebanyak panjang in
+            for(int a = 0; a < in.length; a++){
+                randAccIn.read(in[a]);
+            }
+                        
+            // XTS dilakukan hingga sebelum blok terakhir
+            // XTS full dilakukan karena pada blok-blok sebelum blok akhir adalah blok blok yang terisi penuh
+            for(int x = 0; x <= byte_size - 2; x++){
+                out[x] = enkripBlok(keyPlain1, keyPlain2, in[x], x);
+            }
+            
+            // Pada blok terakhir
+            // Jika tidak ada proses stealing
+            if(end_block == 0){
+                out[byte_size - 1] = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
+                out[byte_size] = new byte[0];
+            }
+
+            // Jika terjadi stealing
+            else{
+                System.out.println ("Stealing");
+                byte[] cc = enkripBlok(keyPlain1, keyPlain2, in[byte_size - 1], byte_size - 1);
+                System.arraycopy(cc, 0, out[byte_size], 0, end_block);
+                byte[] cp = new byte[block_size - end_block];
+                for(int y = end_block; y < block_size; y++){
+                    cp[y - end_block] = cc[y];
+                }
+                byte[] pp = new byte[in[byte_size].length + cp.length];
+                System.arraycopy(in[byte_size], 0, pp, 0, in[byte_size].length);
+                System.arraycopy(cp, 0, pp, in[byte_size].length, cp.length);
+            }
+            randAccIn.close();
+                        
+            System.out.println ("Success encrypting");
+  
+            // menampilkan JOptionPane untuk mengetahui proses telah selesai
+            int response = JOptionPane.showConfirmDialog(null, "Encrypt Done !!", "", JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
+                        
+            // menyimpan file output
+            if(response == JOptionPane.OK_OPTION){
+                RandomAccessFile randAccOut = new RandomAccessFile(cipher, "rw");
+                for(int p = 0; p < out.length; p++){
+                    randAccOut.write(out[p]);
+                }
+                randAccOut.close();
+            }
             
         } catch (Exception ex) {
              Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
@@ -678,11 +695,12 @@ public class Tampilan extends javax.swing.JFrame {
         if(jComboBox1.getSelectedItem()=="Browse File"){
             // membuka direktori
             pilih.showOpenDialog(null);
+            
             // memilih file
             File ivPlain = pilih.getSelectedFile();
+            
             // nama file yang dipilih beserta direktori nya
             String namaIVPlain = ivPlain.getAbsolutePath();
-            // System.out.println(namaIVPlain);
                         
             File file = new File(namaIVPlain);
             try {
@@ -691,7 +709,9 @@ public class Tampilan extends javax.swing.JFrame {
                 // baca isi file
                 String iv = br.readLine();
                 
+                // menampilkan di gui
                 textField5.setText(iv);
+                
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -699,25 +719,103 @@ public class Tampilan extends javax.swing.JFrame {
             }
         }
         else if(jComboBox1.getSelectedItem()=="12345678901234567890123456789012"){
+            // deklarasi iv yang diberikan
             String iv = "12345678901234567890123456789012";
+            
+            // menampilkan di gui
             textField5.setText(iv);
         } 
+        else if(jComboBox1.getSelectedItem()=="21098765432109876543210987654321"){
+            // deklarasi iv yang diberikan
+            String iv = "21098765432109876543210987654321";
+            
+            // menampilkan di gui
+            textField5.setText(iv);
+        }
+        else if(jComboBox1.getSelectedItem()=="11112222333444555666777888999000"){
+            // deklarasi iv yang diberikan
+            String iv = "11112222333444555666777888999000";
+            
+            // menampilkan di gui
+            textField5.setText(iv);
+        }
+        else if(jComboBox1.getSelectedItem()=="98542173060965218743086429753178"){
+            // deklarasi iv yang diberikan
+            String iv = "98542173060965218743086429753178";
+            
+            // menampilkan di gui
+            textField5.setText(iv);
+        }
+        else if(jComboBox1.getSelectedItem()=="77983467093215688930892529176052"){
+            // deklarasi iv yang diberikan
+            String iv = "77983467093215688930892529176052";
+            
+            // menampilkan di gui
+            textField5.setText(iv);
+        }
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
         // TODO add your handling code here:
         if(jComboBox2.getSelectedItem()=="Browse File"){
-            //membuka direktori
+            // membuka direktori
             pilih.showOpenDialog(null);
+            
             // memilih file
-            File ivCipher = pilih.getSelectedFile();
-            // nama file yang dipilih beserta direktorinya
-            String namaIVCipher = ivCipher.getAbsolutePath();
-            // menampilkan direktori dan file yang dipilih dalam bentuk tulisan di textfield
-            textField6.setText(namaIVCipher);
+            File ivPlain = pilih.getSelectedFile();
+            
+            // nama file yang dipilih beserta direktori nya
+            String namaIVPlain = ivPlain.getAbsolutePath();
+                        
+            File file = new File(namaIVPlain);
+            try {
+                // using bufferedreader file
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                // baca isi file
+                String iv = br.readLine();
+                
+                // menampilkan di gui
+                textField6.setText(iv);
+                
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Tampilan.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         else if(jComboBox2.getSelectedItem()=="12345678901234567890123456789012"){
+            // deklarasi iv yang diberikan
             String iv1 = "12345678901234567890123456789012";
+            
+            // menampilkan di gui
+            textField6.setText(iv1);
+        }
+        else if(jComboBox2.getSelectedItem()=="21098765432109876543210987654321"){
+            // deklarasi iv yang diberikan
+            String iv1 = "21098765432109876543210987654321";
+            
+            // menampilkan di gui
+            textField6.setText(iv1);
+        }
+        else if(jComboBox2.getSelectedItem()=="11112222333444555666777888999000"){
+            // deklarasi iv yang diberikan
+            String iv1 = "11112222333444555666777888999000";
+            
+            // menampilkan di gui
+            textField6.setText(iv1);
+        }
+        else if(jComboBox2.getSelectedItem()=="98542173060965218743086429753178"){
+            // deklarasi iv yang diberikan
+            String iv1 = "98542173060965218743086429753178";
+            
+            // menampilkan di gui
+            textField6.setText(iv1);
+        }
+        else if(jComboBox2.getSelectedItem()=="77983467093215688930892529176052"){
+            // deklarasi iv yang diberikan
+            String iv1 = "77983467093215688930892529176052";
+            
+            // menampilkan di gui
             textField6.setText(iv1);
         }
     }//GEN-LAST:event_jComboBox2ItemStateChanged
@@ -793,44 +891,48 @@ public class Tampilan extends javax.swing.JFrame {
     private java.awt.TextField textField6;
     // End of variables declaration//GEN-END:variables
 
+    // Enkripsi Perblok
     public byte[] enkripBlok(byte[] key1, byte[] key2, byte[] b, int y) throws Exception {
         AES aes = new AES(key2);
         byte[] t = multiplyAlpha[y];
-	byte[] pp = xortweaktext(t, b); 
+	byte[] pp = xex(t, b); 
 	aes = new AES(key1);
 	byte[] cc = aes.encrypt(pp);
-	byte[] c = xortweaktext(t, cc);  
+	byte[] c = xex(t, cc);  
 		
 	return c;
     }
     
+    // Dekripsi perblok
     private byte[] dekripBlok(byte[] key1, byte[] key2, byte[] b, int y) throws Exception {
         AES aes= new AES(key2);
 	byte[] t = multiplyAlpha[y];
-	byte[] cc = xortweaktext(t, b);
+	byte[] cc = xex(t, b);
 	aes= new AES(key1);
 	byte[] pp = aes.decrypt(cc);
-	byte[] p = xortweaktext(t, pp);  
+	byte[] p = xex(t, pp);  
 		
 	return p;
     }
     
-    public void multiplyAlpha(byte[] tweakEncrypt) {
-        byte[][] multiplyDP = new byte[byte_size + 1][block_size];
-        multiplyDP[0] = tweakEncrypt;
+    // Lakukan alpha^j
+    public void multiplyAlpha(byte[] tweak) {
+        byte[][] multiply = new byte[byte_size + 1][block_size];
+        multiply[0] = tweak;
         for (int i = 1; i < byte_size + 1; i++) {
-            multiplyDP[i][0] = (byte) ((2 * (multiplyDP[i-1][0] % 128)) ^ (135 * (multiplyDP[i-1][15] / 128)));
+            multiply[i][0] = (byte) ((2 * (multiply[i-1][0] % 128)) ^ (135 * (multiply[i-1][15] / 128)));
             for (int k = 1; k < 16; k++) {
-                multiplyDP[i][k] = (byte) ((2 * (multiplyDP[i-1][k] % 128)) ^ (multiplyDP[i-1][k - 1] / 128));
+                multiply[i][k] = (byte) ((2 * (multiply[i-1][k] % 128)) ^ (multiply[i-1][k - 1] / 128));
             }
         }
-        this.multiplyAlpha =  multiplyDP;
+        this.multiplyAlpha =  multiply;
     }
     
-    public byte[] xortweaktext (byte[] tweakEncrypt, byte[] textBlock){
+    // melakukan xex (xor-encrypt-xor)
+    public byte[] xex (byte[] tweak, byte[] block){
     	byte[] result = new byte[16];
-    	for(int i=0; i<tweakEncrypt.length; i++){
-    		result[i] = (byte)(tweakEncrypt[i]^textBlock[i]);
+    	for(int i=0; i<tweak.length; i++){
+    		result[i] = (byte)(tweak[i]^block[i]);
     	}
     	return result;
     }
@@ -848,10 +950,7 @@ class AES {
                 
 	}
 	
-	/*
-	 * AES enkripsi
-	 * 
-	 */
+	// AES enkripsi
 	public byte[] encrypt(byte[] textHex)throws Exception {
 		SecretKey key = new SecretKeySpec(DatatypeConverter.parseHexBinary(keyHex), "AES");
 			
@@ -863,10 +962,7 @@ class AES {
 		return result;
 	}
 	
-	/*
-	 * AES dekripsi
-	 * 
-	 */
+	// AES dekripsi
 	public byte[] decrypt(byte[] textHex)throws Exception {
 		
 		SecretKey key = new SecretKeySpec(DatatypeConverter.parseHexBinary(keyHex), "AES");
@@ -887,11 +983,7 @@ class Konversi {
     
     public static final char[] HEX_DIGITS = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
 	
-	/*
-	 * Method untuk mengubah suatu string menjadi byte[]
-	 * @param : str adalah string yang akan diubah menjadi tipe data array of byte
-	 * @return array of byte
-	 */
+	// convert hex to byte
 	public static byte[] hexStringTobyteArray(String str) {
             byte[] b = new byte[str.length() / 2];
             for (int i = 0; i < b.length; i++) {
@@ -902,20 +994,33 @@ class Konversi {
             return b;
         }
 	
-	/*
-	 * Method untuk mengubah bentuk array of byte menjadi String
-	 * @param : ba adalah array of byte yang akan diubah menjadi tipe data String
-	 * @return String hasil convert
-	 */
-	 public static String toHEX1 (byte[] ba) {
-		 int length = ba.length;
-	     char[] buf = new char[length * 2];
-	     for (int i = 0, j = 0, k; i < length; ) {
-	         k = ba[i++];
-	         buf[j++] = HEX_DIGITS[(k >>> 4) & 0x0F];
-	         buf[j++] = HEX_DIGITS[ k        & 0x0F];
-	     }
-	     return new String(buf);
-	}
+	// convert byte to hex
+	  public static String toHEX1(byte[] b)
+    {
+
+       String hs = "";
+       String stmp = "";
+
+       for (int n = 0; n < b.length; n++)
+       {
+          stmp = (java.lang.Integer.toHexString(b[n] & 0XFF));
+
+          if (stmp.length() == 1)
+          {
+             hs = hs + "0" + stmp;
+          }
+          else
+          {
+             hs = hs + stmp;
+          }
+
+          if (n < b.length - 1)
+          {
+             hs = hs + "";
+          }
+       }
+
+       return hs;
+    }
 
 }
